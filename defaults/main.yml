@@ -1,0 +1,53 @@
+---
+# All variables specific to this role are prefixed with "ct_gitea_"
+ct_gitea_task_prefix: "=== Gitea CT ==="
+
+# File names
+ct_gitea_template_env: "gitea.env.j2"
+ct_gitea_file_env: "{{ ct_gitea_ct_name }}.env"
+
+# Path settings
+ct_gitea_path_config_base: "/etc/ct_gitea"
+ct_gitea_path_config_file: "{{ ct_gitea_path_config_base }}/{{ ct_gitea_file_env }}"
+ct_gitea_path_base: "/srv/ct_gitea"
+ct_gitea_path_data: "{{ ct_gitea_path_base }}/{{ ct_gitea_ct_name }}"
+ct_gitea_path_ct_data: "/data"
+
+# Network settings
+ct_gitea_bind_addr: "127.0.0.1"
+ct_gitea_bind_addr_www: "{{ ct_gitea_bind_addr }}"
+ct_gitea_bind_addr_ssh: "{{ ct_gitea_bind_addr }}"
+ct_gitea_bind_port_www: "3000"
+ct_gitea_bind_port_ssh: "2220"
+ct_gitea_bind_ct_port_www: "3000"
+ct_gitea_bind_ct_port_ssh: "22"
+
+# Container settings
+ct_gitea_ct_name: "gitea"
+ct_gitea_ct_image: "gitea/gitea"
+ct_gitea_ct_version: "1.16.4"
+ct_gitea_ct_restart_policy: "always"
+ct_gitea_ct_state: "started"
+ct_gitea_ct_restart: "no"
+ct_gitea_ct_pull: "no"
+ct_gitea_ct_recreate: "no"
+ct_gitea_ct_volume_data:
+  - "{{ ct_gitea_path_data }}:{{ ct_gitea_path_ct_data }}"
+ct_gitea_ct_volume_tz:
+  - "/etc/timezone:/etc/timezone:ro"
+  - "/etc/localtime:/etc/localtime:ro"
+ct_gitea_ct_volume_extra: []
+ct_gitea_ct_volumes: "{{ ct_gitea_ct_volume_data + ct_gitea_ct_volume_tz + ct_gitea_ct_volume_extra }}"
+ct_gitea_ct_ports_extra: []
+ct_gitea_ct_ports_www:
+  - "{{ ct_gitea_bind_addr_www }}:{{ ct_gitea_bind_port_www }}:{{ ct_gitea_bind_ct_port_www }}"
+ct_gitea_ct_ports_ssh:
+  - "{{ ct_gitea_bind_addr_ssh }}:{{ ct_gitea_bind_port_ssh }}:{{ ct_gitea_bind_ct_port_ssh }}"
+ct_gitea_ct_ports: "{{ ct_gitea_ct_ports_www + ct_gitea_ct_ports_ssh + ct_gitea_ct_ports_extra }}"
+
+# Environment variables
+ct_gitea_env_app_name: "Gitea: Git with a cup of tea"
+ct_gitea_env_user_uid: "1000"
+ct_gitea_env_user_gid: "1000"
+ct_gitea_env_extra: {}
+...

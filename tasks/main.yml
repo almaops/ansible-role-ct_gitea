@@ -1,0 +1,31 @@
+---
+- name: "{{ ct_gitea_task_prefix }} Create config directory"
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - "{{ ct_gitea_path_config_base }}"
+- name: "{{ ct_gitea_task_prefix }} Create config directory"
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{  }}"
+    group: "{{  }}"
+  loop:
+    - "{{ ct_gitea_path_data }}"
+- name: "{{ ct_gitea_task_prefix }} Create env file"
+  template:
+    src: "{{ ct_gitea_template_env }}"
+    dest: "{{ ct_gitea_path_config_file }}"
+- name: "{{ ct_gitea_task_prefix }} Provision container"
+  docker_container:
+    env_file: "{{ ct_gitea_path_config_file }}"
+    image: "{{ ct_gitea_ct_image }}:{{ ct_gitea_ct_version }}"
+    name: "{{ ct_gitea_ct_name }}"
+    ports: "{{ ct_gitea_ct_ports }}"
+    pull: "{{ ct_gitea_ct_pull }}"
+    recreate: "{{ ct_gitea_ct_recreate }}"
+    restart_policy: "{{ ct_gitea_ct_restart_policy }}"
+    state: "{{ ct_gitea_ct_state }}"
+    volumes: "{{ ct_gitea_ct_volumes }}"
+...
