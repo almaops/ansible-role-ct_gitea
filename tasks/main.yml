@@ -3,20 +3,27 @@
   file:
     path: "{{ item }}"
     state: directory
+    owner: root
+    group: root
+    mode: '0755'
   loop:
     - "{{ ct_gitea_path_config_base }}"
 - name: "{{ ct_gitea_task_prefix }} Create config directory"
   file:
     path: "{{ item }}"
     state: directory
-    owner: "{{  }}"
-    group: "{{  }}"
+    mode: '0700'
+    owner: "{{ ct_gitea_env_user_uid }}"
+    group: "{{ ct_gitea_env_user_gid }}"
   loop:
     - "{{ ct_gitea_path_data }}"
 - name: "{{ ct_gitea_task_prefix }} Create env file"
   template:
     src: "{{ ct_gitea_template_env }}"
     dest: "{{ ct_gitea_path_config_file }}"
+    owner: root
+    group: root
+    mode: '0400'
 - name: "{{ ct_gitea_task_prefix }} Provision container"
   docker_container:
     env_file: "{{ ct_gitea_path_config_file }}"
